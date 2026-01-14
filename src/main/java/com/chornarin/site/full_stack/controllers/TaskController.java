@@ -15,6 +15,7 @@ import com.chornarin.site.full_stack.dto.TaskResponseDto;
 import com.chornarin.site.full_stack.iml.TaskServiceImp;
 import com.chornarin.site.full_stack.models.TaskModel;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +40,7 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<TaskResponseDto> createTask(TaskRequestDto request) {
+    public ResponseEntity<TaskResponseDto> createTask( @Valid TaskRequestDto request) {
         TaskResponseDto task = takeserviceImp.createTask(request);
         URI location = URI.create("/api/tasks/" + task.getId());
         return ResponseEntity.created(location).body(task);
