@@ -8,7 +8,7 @@ import com.chornarin.site.full_stack.models.Departments;
 public interface DepartmentService {
 
     boolean existByName(String name);
-    List<Departments> getAll();
+    List<Departments>  getAll();
     Departments create(DepartmentRequestDto departmentRequestDto);
 
 }

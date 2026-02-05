@@ -1,7 +1,11 @@
 server:
-  port: 9999
+  port: 8080
 
 spring:
+  jwt:
+    secret: sk_live_4Ys4kEsWHhUu7OoYobSuNjNEFhFZlbak
+    expiration: 86400000        # 24 hours
+    refresh-expiration: 604800000 # 7 days
   datasource:
     url: jdbc:postgresql://localhost:5433/mydb
     username: myuser

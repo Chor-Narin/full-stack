@@ -7,9 +7,10 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.chornarin.site.full_stack.Enum.StudentStatusEnum;
+import com.chornarin.site.full_stack.annotations.EmailNotNull;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
@@ -21,26 +22,33 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "students")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @EntityListeners(AuditingEntityListener.class)
 public class Students {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
-    @Column(name="firstName", nullable = true, unique = false)
-    private String FirstName;
+    @Column(name="firstName", nullable = true, unique = false, columnDefinition = "varchar(255)")
+    private String firstName;
 
-    @Column(name="lastName", nullable = true, unique = false)
-    private String LastName;
+    @Column(name="lastName", nullable = true, unique = false, columnDefinition = "varchar(255)")
+    private String lastName;
 
     @Column(name="email", nullable = true, unique = true)
-    private String Email;
+    @EmailNotNull
+    private String email;
 
     @Enumerated(EnumType.ORDINAL)
     public StudentStatusEnum Status;
@@ -49,6 +57,7 @@ public class Students {
     //===========================================> Many To One
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id")
+    // @JsonIgnore()
     private Departments department;
 
 
@@ -58,8 +67,6 @@ public class Students {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
-
-
 
 }
 

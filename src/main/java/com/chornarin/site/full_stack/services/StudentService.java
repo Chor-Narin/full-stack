@@ -18,7 +18,9 @@ public interface StudentService  {
     // create
     Students createStudent(StudentRequestDto studentDto);
 
-    // Students updateStudent(StudentDto studentDto);
+    //get by email
+    List<Students> getByEmail(String email);
+
 
 
 }

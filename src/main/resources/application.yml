@@ -4,5 +4,8 @@ spring:
   profiles:
     active:
     - dev
+  devtools:
+    restart:
+      enabled: true
   application:
     name: full-stack
