@@ -3,13 +3,13 @@ server:
 
 spring:
   jwt:
-    secret: sk_live_4Ys4kEsWHhUu7OoYobSuNjNEFhFZlbak
+    secret: ${JWT_SECRET}
     expiration: 86400000        # 24 hours
     refresh-expiration: 604800000 # 7 days
   datasource:
     url: jdbc:postgresql://localhost:5433/mydb
-    username: myuser
-    password: mypassword
+    username: ${USERNAME}
+    password: ${PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
