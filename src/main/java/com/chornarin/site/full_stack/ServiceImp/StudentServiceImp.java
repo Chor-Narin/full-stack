@@ -60,7 +60,7 @@ public class StudentServiceImp implements StudentService {
     }
 
     @Override
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public List<StudentResponseDto> getAll() {
         List<Students> students = studentRepository.findAll();
         List<StudentResponseDto> mappers = studentMapper.toDto(students);

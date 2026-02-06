@@ -5,8 +5,6 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.chornarin.site.full_stack.Response.Pagination;
 import com.chornarin.site.full_stack.ServiceImp.StudentServiceImp;
+import com.chornarin.site.full_stack.annotations.RateLimited;
 import com.chornarin.site.full_stack.dto.StudentResponseDto;
 import com.chornarin.site.full_stack.dto.requests.StudentRequest;
 import com.chornarin.site.full_stack.models.Students;
@@ -43,7 +42,8 @@ public class StudentController {
     // }
 
     @GetMapping
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @RateLimited(limit = 5, duration = 60)
     public ResponseEntity<List<StudentResponseDto>> getAll() {
     return ResponseEntity.ok(studentServiceImp.getAll());
     }

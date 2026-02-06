@@ -147,6 +147,23 @@
 			<artifactId>dotenv-java</artifactId>
 			<version>3.0.0</version>
 		</dependency>
+
+        <!-- Rate Limiting -->
+		<dependency>
+			<groupId>com.bucket4j</groupId>
+			<artifactId>bucket4j_jdk17-core</artifactId>
+			<version>8.16.1</version>
+		</dependency>
+		<!-- Redis -->
+		<!-- Source: https://mvnrepository.com/artifact/com.github.vladimir-bukhtoyarov/bucket4j-redis -->
+		<dependency>
+			<groupId>com.github.vladimir-bukhtoyarov</groupId>
+			<artifactId>bucket4j-redis</artifactId>
+			<version>8.0.1</version>
+			<scope>compile</scope>
+		</dependency>
+
+				
 		
 	</dependencies>
 
