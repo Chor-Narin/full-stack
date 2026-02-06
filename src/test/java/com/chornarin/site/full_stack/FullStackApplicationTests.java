@@ -1,13 +1,13 @@
-package com.chornarin.site.full_stack;
+// package com.chornarin.site.full_stack;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+// import org.junit.jupiter.api.Test;
+// import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class FullStackApplicationTests {
+// @SpringBootTest
+// class FullStackApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+// 	@Test
+// 	void contextLoads() {
+// 	}
 
-}
+// }

@@ -4,6 +4,8 @@ import com.chornarin.site.full_stack.customs.CustomUserDetailsService;
 import com.chornarin.site.full_stack.filters.JwtAuthenticationFilter;
 import com.chornarin.site.full_stack.filters.RequestLoggingFilter;
 import com.chornarin.site.full_stack.filters.RequestTimingFilter;
+import com.chornarin.site.full_stack.customs.CustomSecurityHandlers.JwtAccessDeniedHandler;
+import com.chornarin.site.full_stack.customs.CustomSecurityHandlers.JwtAuthenticationEntryPoint;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -31,6 +34,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 @Data
 public class SecurityConfig {
@@ -39,6 +43,8 @@ public class SecurityConfig {
     private final RequestLoggingFilter requestLoggingFilter;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomUserDetailsService userDetailService;
+    private final JwtAuthenticationEntryPoint authenticationEntryPoint;
+    private final JwtAccessDeniedHandler accessDeniedHandler;
 
     private static final String[] SWAGGER_WHITELIST = {
             "/v3/api-docs/**",
@@ -52,17 +58,23 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // Disable for stateless APIs
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/user","/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/user", "/api/auth/**").permitAll()
                         .requestMatchers(SWAGGER_WHITELIST).permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                // Handle for Header Error
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler))
+                // Filter on the incoming requests
                 .addFilterBefore(requestLoggingFilter, SecurityContextHolderFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authenticationProvider(authenticationProvider());
-                // .addFilterAfter(requestTimingFilter,
-                // UsernamePasswordAuthenticationFilter.class)
-                // .httpBasic(Customizer.withDefaults());
+        // .addFilterAfter(requestTimingFilter,
+        // UsernamePasswordAuthenticationFilter.class)
+        // .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
@@ -75,7 +87,7 @@ public class SecurityConfig {
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailService); // ← pass it here!
-        provider.setPasswordEncoder(passwordEncoder()); 
+        provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
 
@@ -83,7 +95,7 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config) throws Exception {
 
-        return config.getAuthenticationManager(); // exposed for manual use
+        return config.getAuthenticationManager();
     }
 
     @Bean

@@ -1,4 +1,4 @@
-package com.chornarin.site.full_stack.ServiceImp;
+package com.chornarin.site.full_stack.ServiceImp.jwt;
 
 import java.time.Instant;
 

@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+
 
 @Data
 @Configuration
@@ -15,12 +17,15 @@ import lombok.NoArgsConstructor;
 public class JwtProperties {
     
     @NotBlank
-    private String secret = "f60882e019fc5871ddb5d12e3cf89af4811ce230991b492160c436549c4a8f3e7e261a39689c2f4d7e921ef9152a00deee8293df9a3e7ddfa3d32ed52cbd4d14";
+    @Value("${JWT_SECRET}")
+    private String secret;
 
     @Min(60000)
+    @Value("${EXPIRATION}")
     private long expiration = 86400000;
 
     @Min(60000)
+    @Value("${REFRESH_EXPIRATION}")
     private long refreshExpiration = 604800000 ;
 
 }

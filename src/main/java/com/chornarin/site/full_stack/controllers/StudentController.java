@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,11 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.chornarin.site.full_stack.Exceptions.GlobalExceptionHandler;
 import com.chornarin.site.full_stack.Response.Pagination;
 import com.chornarin.site.full_stack.ServiceImp.StudentServiceImp;
-import com.chornarin.site.full_stack.dto.StudentRequestDto;
 import com.chornarin.site.full_stack.dto.StudentResponseDto;
+import com.chornarin.site.full_stack.dto.requests.StudentRequest;
 import com.chornarin.site.full_stack.models.Students;
 
 import lombok.Data;
@@ -26,13 +28,24 @@ import lombok.Data;
 @RestController
 @RequestMapping(StudentController.StudentUrl)
 public class StudentController {
-    public static final String StudentUrl = "/student";
+    public static final String StudentUrl = "/api/student";
     private final StudentServiceImp studentServiceImp;
-    private final GlobalExceptionHandler globalExceptionHandler;
+
+    // @GetMapping
+    // public ResponseEntity<List<StudentResponseDto>> getAll() {
+    // return ResponseEntity.ok(studentServiceImp.getAll());
+    // }
+
+    // @GetMapping("/me")
+    // public String getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
+    //     User user = (User) userDetails;
+    //     return "Hello, " + user.getUsername();
+    // }
 
     @GetMapping
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<StudentResponseDto>> getAll() {
-        return ResponseEntity.ok(studentServiceImp.getAll());
+    return ResponseEntity.ok(studentServiceImp.getAll());
     }
 
     @GetMapping("/all")
@@ -49,15 +62,15 @@ public class StudentController {
                     studentServiceImp.getAllStudents(pagination));
         } catch (Exception e) {
             return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(e.getMessage());
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e.getMessage());
         }
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Students> createStudent(@Validated @RequestBody StudentRequestDto dto) {
-        return ResponseEntity.ok(studentServiceImp.createStudent(dto));
+    public ResponseEntity<Students> createStudent(@Validated @RequestBody StudentRequest request) {
+        return ResponseEntity.ok(studentServiceImp.createStudent(request));
     }
 
     @GetMapping("/email")

@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.chornarin.site.full_stack.Response.Pagination;
@@ -15,6 +17,7 @@ import com.chornarin.site.full_stack.Response.PaginationResponse;
 import com.chornarin.site.full_stack.config.AuditConfig;
 import com.chornarin.site.full_stack.dto.StudentRequestDto;
 import com.chornarin.site.full_stack.dto.StudentResponseDto;
+import com.chornarin.site.full_stack.dto.requests.StudentRequest;
 import com.chornarin.site.full_stack.mappers.StudentMapper;
 import com.chornarin.site.full_stack.models.Departments;
 import com.chornarin.site.full_stack.models.Students;
@@ -38,15 +41,16 @@ public class StudentServiceImp implements StudentService {
     private final StudentMapper studentMapper;
 
     @Override
-    public Students createStudent(StudentRequestDto studentDto) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public Students createStudent(StudentRequest request) {
         // find department Id
-        Optional<Departments> department = departmentRepository.findById(studentDto.getDepartmentId());
+        Optional<Departments> department = departmentRepository.findById(request.department());
         if (department.isEmpty()) {
             throw new RuntimeException("department not found");
         }
         // get department
         Departments departments = department.get();
-        Students students = studentMapper.toEntity(studentDto, departments);
+        Students students = studentMapper.toEntity(request, departments);
         return studentRepository.save(students);
     }
 
@@ -56,6 +60,7 @@ public class StudentServiceImp implements StudentService {
     }
 
     @Override
+    @PreAuthorize("hasRole('USER')")
     public List<StudentResponseDto> getAll() {
         List<Students> students = studentRepository.findAll();
         List<StudentResponseDto> mappers = studentMapper.toDto(students);

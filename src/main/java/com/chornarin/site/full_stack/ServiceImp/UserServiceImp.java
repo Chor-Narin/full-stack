@@ -12,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.chornarin.site.full_stack.Exceptions.ExistEmailException;
+import com.chornarin.site.full_stack.ServiceImp.jwt.AuthService;
+import com.chornarin.site.full_stack.ServiceImp.jwt.JwtServiceImp;
 import com.chornarin.site.full_stack.config.auth.JwtProperties;
 import com.chornarin.site.full_stack.dto.requests.LoginRequest;
 import com.chornarin.site.full_stack.dto.requests.RegisterRequest;
@@ -67,6 +69,7 @@ public class UserServiceImp implements UserService {
         User user = new User();
         user.setUsername(request.username());
         user.setEmail(request.email());
+        user.setRole(request.role());
         user.setPassword(passwordEncoder.encode(request.password()));
         userRepository.save(user);
     }

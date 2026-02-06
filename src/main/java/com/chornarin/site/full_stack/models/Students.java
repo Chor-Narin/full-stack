@@ -51,7 +51,7 @@ public class Students {
     private String email;
 
     @Enumerated(EnumType.ORDINAL)
-    public StudentStatusEnum Status;
+    public StudentStatusEnum status;
 
 
     //===========================================> Many To One
