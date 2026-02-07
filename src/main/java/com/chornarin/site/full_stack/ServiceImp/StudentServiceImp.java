@@ -18,6 +18,7 @@ import com.chornarin.site.full_stack.config.AuditConfig;
 import com.chornarin.site.full_stack.dto.StudentRequestDto;
 import com.chornarin.site.full_stack.dto.StudentResponseDto;
 import com.chornarin.site.full_stack.dto.requests.StudentRequest;
+import com.chornarin.site.full_stack.helper.ApiResponse;
 import com.chornarin.site.full_stack.mappers.StudentMapper;
 import com.chornarin.site.full_stack.models.Departments;
 import com.chornarin.site.full_stack.models.Students;
@@ -61,10 +62,10 @@ public class StudentServiceImp implements StudentService {
 
     @Override
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public List<StudentResponseDto> getAll() {
+    public ApiResponse<List<StudentResponseDto>> getAll() {
         List<Students> students = studentRepository.findAll();
         List<StudentResponseDto> mappers = studentMapper.toDto(students);
-        return mappers;
+        return ApiResponse.success(mappers, "Student data fetches successfully");
     }
 
     // get all students
@@ -100,6 +101,5 @@ public class StudentServiceImp implements StudentService {
     public List<Students> getAllWithDepartment() {
         return studentRepository.findAllWithDepartment();
     }
-
 
 }

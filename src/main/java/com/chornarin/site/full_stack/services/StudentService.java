@@ -4,13 +4,14 @@ import java.util.List;
 
 import com.chornarin.site.full_stack.dto.StudentResponseDto;
 import com.chornarin.site.full_stack.dto.requests.StudentRequest;
+import com.chornarin.site.full_stack.helper.ApiResponse;
 import com.chornarin.site.full_stack.models.Departments;
 import com.chornarin.site.full_stack.models.Students;
 
 public interface StudentService  {
 
     // get Student
-    List<StudentResponseDto> getAll();
+    ApiResponse<List<StudentResponseDto>> getAll();
 
     // find department
     List<Departments> findDepartmentById(Long id);

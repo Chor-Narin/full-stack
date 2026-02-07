@@ -19,6 +19,7 @@ import com.chornarin.site.full_stack.ServiceImp.StudentServiceImp;
 import com.chornarin.site.full_stack.annotations.RateLimited;
 import com.chornarin.site.full_stack.dto.StudentResponseDto;
 import com.chornarin.site.full_stack.dto.requests.StudentRequest;
+import com.chornarin.site.full_stack.helper.ApiResponse;
 import com.chornarin.site.full_stack.models.Students;
 
 import lombok.Data;
@@ -44,8 +45,8 @@ public class StudentController {
     @GetMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @RateLimited(limit = 5, duration = 60)
-    public ResponseEntity<List<StudentResponseDto>> getAll() {
-    return ResponseEntity.ok(studentServiceImp.getAll());
+    public ApiResponse<List<StudentResponseDto>>  getAll() {
+    return studentServiceImp.getAll();
     }
 
     @GetMapping("/all")

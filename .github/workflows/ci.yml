@@ -1,0 +1,35 @@
+name: CI (Next.js)
+
+on:
+  pull_request:
+    branches: [main]
+
+  # Optional: also run on pushes to main (good for catching issues early)
+  push:
+    branches: [main]
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⬇️ Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20              # or 18 / 22 — whatever your project uses
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci                     # faster & more reliable than npm install
+
+      - name: 🎨 Check code formatting
+        run: npm run format:check
+        # If your script is called something else → change to: npm run format -- --check
+        # or: npx prettier --check .
+
+      - name: 🔍 Run ESLint
+        run: npm run lint
+        # If your lint command is different → e.g. npm run lint:ci or npx eslint .
