@@ -1,0 +1,13 @@
+
+spring:
+  profiles:
+    active:
+    - dev
+  config:
+    import:
+    - optional:file:.env.properties
+  devtools:
+    restart:
+      enabled: true
+  application:
+    name: full-stack

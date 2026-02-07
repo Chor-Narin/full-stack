@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+spring:
+  config:
+    import:
+    - optional:file:.env.properties
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration: ${EXPIRATION}        # 24 hours
+    refresh-expiration: ${REFRESH_EXPIRATION} # 7 days
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update           # or 'validate' / 'none' in production
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        # Optional: better formatting in logs
+        format_sql: true
